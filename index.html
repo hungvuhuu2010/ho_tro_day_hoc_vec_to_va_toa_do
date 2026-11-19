@@ -1,835 +1,331 @@
 <!DOCTYPE html>
+
 <html lang="vi">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Luyện Tập Tọa Độ Vectơ - Mobile App</title>
+
     <!-- Thư viện KaTeX hiển thị công thức toán học -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+
+    <!-- Liên kết file CSS -->
+
+    <link rel="stylesheet" href="style.css">
+
+	<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {
+
         delimiters: [
+
             {left: '$$', right: '$$', display: true},
+
             {left: '$', right: '$', display: false},
+
             {left: '\\(', right: '\\)', display: false},
+
             {left: '\\[', right: '\\]', display: true}
+
         ],
+
         throwOnError: false
+
     });"></script>
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --success-color: #16a34a;
-            --success-hover: #15803d;
-            --danger-color: #dc2626;
-            --dark-bg: #0f172a;
-            --light-bg: #f8fafc;
-            --card-bg: #ffffff;
-            --border-color: #e2e8f0;
-            --text-main: #334155;
-            --text-muted: #64748b;
-        }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--light-bg); color: var(--text-main); min-height: 100vh; line-height: 1.5; padding-bottom: 30px; }
-
-        .portal-header { background: #fff; border-bottom: 1px solid var(--border-color); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .logo-area { display: flex; align-items: center; gap: 10px; }
-        .portal-logo { font-size: 1.6rem; }
-        .logo-area h1 { font-size: 1.05rem; color: var(--dark-bg); font-weight: 700; }
-        .badge-group { display: flex; gap: 6px; align-items: center; }
-        .badge { background: #e0e7ff; color: #3730a3; font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
-        .badge-highscore { background: #fef3c7; color: #b45309; }
-
-        .portal-content { max-width: 600px; margin: 20px auto; padding: 0 16px; }
-
-        .section-title { margin-bottom: 16px; }
-        .section-title h2 { font-size: 1.2rem; color: #1e293b; }
-        .section-title p { font-size: 0.85rem; color: var(--text-muted); }
-
-        .app-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-        .app-card { background: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; display: flex; gap: 14px; align-items: flex-start; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
-        .app-card:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06); }
-        .app-card.challenge-card { border: 2px solid #f59e0b; background: #fffbeb; }
-
-        .app-icon { font-size: 1.8rem; background: #eff6ff; padding: 10px; border-radius: 10px; line-height: 1; flex-shrink: 0; }
-        .challenge-icon { background: #fef3c7; color: #d97706; }
-        .app-details { flex-grow: 1; }
-        .app-details h3 { font-size: 1rem; margin-bottom: 4px; color: var(--dark-bg); }
-        .app-details p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px; }
-
-        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px 14px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; font-size: 0.85rem; width: 100%; }
-        .btn-primary { background: var(--primary-color); color: #fff; } .btn-primary:hover { background: var(--primary-hover); }
-        .btn-warning { background: #d97706; color: #fff; } .btn-warning:hover { background: #b45309; }
-        .btn-success { background: var(--success-color); color: #fff; }
-        .btn-danger { background: var(--danger-color); color: #fff; }
-        .btn-secondary { background: #64748b; color: #fff; }
-
-        /* Modal & Setup View */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); z-index: 1000; justify-content: center; align-items: center; padding: 16px; overflow-y: auto; }
-        .modal.active { display: flex; }
-        .auth-card { background: var(--card-bg); width: 100%; max-width: 480px; padding: 24px; border-radius: 14px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); }
-
-        .input-group { text-align: left; margin-bottom: 14px; }
-        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-main); }
-        .input-group input[type="text"] { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; }
-        .input-group input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
-
-        .checkbox-group { display: flex; flex-direction: column; gap: 8px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); max-height: 200px; overflow-y: auto; margin-bottom: 16px; }
-        .checkbox-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; cursor: pointer; }
-        .checkbox-item input { width: 16px; height: 16px; accent-color: var(--primary-color); }
-
-        /* Score & Quiz Interface */
-        .quiz-header { display: flex; justify-content: space-between; align-items: center; background: #f1f5f9; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 0.85rem; font-weight: 700; }
-        .score-box { color: var(--primary-color); }
-        .streak-box { color: #d97706; }
-        .question-text { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: var(--dark-bg); background: #f8fafc; padding: 14px; border-radius: 8px; border-left: 4px solid var(--primary-color); }
-
-        .options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-        .option-btn { background: #fff; border: 1.5px solid var(--border-color); padding: 12px 16px; border-radius: 8px; text-align: left; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; }
-        .option-btn:hover { border-color: var(--primary-color); background: #eff6ff; }
-        .option-btn.correct { background: #dcfce7; border-color: var(--success-color); color: #15803d; }
-        .option-btn.wrong { background: #fee2e2; border-color: var(--danger-color); color: #b91c1c; }
-
-        .feedback-box { padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; margin-bottom: 14px; display: none; }
-        .feedback-box.correct { display: block; background: #dcfce7; color: #15803d; }
-        .feedback-box.wrong { display: block; background: #fee2e2; color: #b91c1c; }
-		
-		/* Nút bay Fullscreen chuẩn Mobile UX */
-		.fab-fullscreen {
-			position: fixed;
-			bottom: 20px;
-			right: 20px;
-			width: 48px;
-			height: 48px;
-			border-radius: 50%;
-			background: var(--primary-color, #2563eb);
-			color: #ffffff;
-			border: none;
-			box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-			font-size: 1.3rem;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-			z-index: 9999;
-			transition: transform 0.2s, background 0.2s;
-		}
-
-		.fab-fullscreen:active {
-			transform: scale(0.9);
-		}
-    </style>
 </head>
+
 <body>
 
+
+
     <header class="portal-header">
+
         <div class="logo-area">
+
             <span class="portal-logo">📐</span>
+
             <div>
-                <h1>Tọa Độ Vectơ</h1>
+
+                <h1>Ứng dụng hỗ trợ dạy học tọa Độ Vectơ</h1>
+
+                <p> Tác giả: Vũ Hữu Hùng, trường THPT Nguyễn Trãi - Thường Tín</p>
+
                 <div class="badge-group">
-                    <span class="badge">Luyện Tập Mobile</span>
+
                     <span class="badge badge-highscore" id="highScoreDisplay">Kỷ lục: 0</span>
+
                 </div>
+
             </div>
+
         </div>
+
     </header>
 
+
+
     <main class="portal-content">
+
         <div class="section-title">
+
             <h2>Chọn Dạng Luyện Tập</h2>
+
             <p>Ôn tập từng công thức hoặc tham gia Thử Thách 20 câu liên tiếp</p>
+
         </div>
+
+
 
         <div class="app-grid">
+
             <!-- 6 Thẻ Công Thức -->
+
             <div class="app-card" onclick="openPractice(1)">
+
                 <div class="app-icon">1️⃣</div>
+
                 <div class="app-details">
+
                     <h3>Tọa Độ Vectơ & Điểm</h3>
+
                     <p>$\vec{u} = x\vec{i} + y\vec{j}$, $\vec{AB} = (x_B-x_A; y_B-y_A)$</p>
-                    <button class="btn btn-primary">Luyện Tập</button>
+
                 </div>
+
             </div>
+
+
 
             <div class="app-card" onclick="openPractice(2)">
+
                 <div class="app-icon">2️⃣</div>
+
                 <div class="app-details">
+
                     <h3>Độ Dài & Khoảng Cách</h3>
+
                     <p>$|\vec{u}| = \sqrt{x^2+y^2}$, $AB = \sqrt{(x_B-x_A)^2+(y_B-y_A)^2}$</p>
-                    <button class="btn btn-primary">Luyện Tập</button>
+
                 </div>
+
             </div>
+
+
 
             <div class="app-card" onclick="openPractice(3)">
+
                 <div class="app-icon">3️⃣</div>
+
                 <div class="app-details">
+
                     <h3>Quan Hệ Hai Vectơ</h3>
+
                     <p>$\vec{a} = \vec{b}$, hai vectơ cùng phương $\vec{b} = k\vec{a}$</p>
-                    <button class="btn btn-primary">Luyện Tập</button>
+
+                    
+
                 </div>
+
             </div>
+
+
 
             <div class="app-card" onclick="openPractice(4)">
+
                 <div class="app-icon">4️⃣</div>
+
                 <div class="app-details">
+
                     <h3>Phép Toán Vectơ</h3>
+
                     <p>$\vec{a} \pm \vec{b} = (x_1 \pm x_2; y_1 \pm y_2)$, $k\vec{a} = (kx_1; ky_1)$</p>
-                    <button class="btn btn-primary">Luyện Tập</button>
+
+                    
+
                 </div>
+
             </div>
+
+
 
             <div class="app-card" onclick="openPractice(5)">
+
                 <div class="app-icon">5️⃣</div>
+
                 <div class="app-details">
+
                     <h3>Trung Điểm & Trọng Tâm</h3>
+
                     <p>Trung điểm $M(\frac{x_A+x_B}{2}; ...)$, Trọng tâm $G(\frac{x_A+x_B+x_C}{3}; ...)$</p>
-                    <button class="btn btn-primary">Luyện Tập</button>
+
+                    
+
                 </div>
+
             </div>
+
+
 
             <div class="app-card" onclick="openPractice(6)">
+
                 <div class="app-icon">6️⃣</div>
+
                 <div class="app-details">
+
                     <h3>Tích Vô Hướng & Góc</h3>
+
                     <p>$\vec{a}\cdot\vec{b} = x_1x_2 + y_1y_2$, $\cos(\vec{a},\vec{b})$</p>
-                    <button class="btn btn-primary">Luyện Tập</button>
+
+                    
+
                 </div>
+
             </div>
+
+
 
             <!-- Thẻ 7: Thử Thách -->
+
             <div class="app-card challenge-card" onclick="openChallengeModal()">
+
                 <div class="app-icon challenge-icon">🏆</div>
+
                 <div class="app-details">
+
                     <h3>THỬ THÁCH CHUỖI 20 CÂU</h3>
+
                     <p>Gõ tên, chọn công thức. Đúng +1 điểm, Sai -2 điểm. Đúng 20 câu liên tiếp để thắng!</p>
+
                     <button class="btn btn-warning">Vào Thử Thách</button>
+
                 </div>
+
             </div>
+
         </div>
+
     </main>
 
+
+
     <!-- Modal Cấu Hình Thử Thách -->
+
     <div class="modal" id="setupModal">
+
         <div class="auth-card">
+
             <h2 style="font-size: 1.2rem; margin-bottom: 12px; color: #b45309;">🏆 Thiết Lập Thử Thách</h2>
+
             <div class="input-group">
+
                 <label>Họ và tên học sinh:</label>
+
                 <input type="text" id="studentName" placeholder="Nhập tên của bạn..." value="Học sinh">
+
             </div>
+
             <div class="input-group">
+
                 <label>Chọn các khối công thức tham gia:</label>
+
                 <div class="checkbox-group">
+
                     <label class="checkbox-item"><input type="checkbox" class="topic-cb" value="1" checked> 1. Tọa độ vectơ & điểm</label>
+
                     <label class="checkbox-item"><input type="checkbox" class="topic-cb" value="2" checked> 2. Độ dài & Khoảng cách</label>
+
                     <label class="checkbox-item"><input type="checkbox" class="topic-cb" value="3" checked> 3. Quan hệ 2 vectơ</label>
+
                     <label class="checkbox-item"><input type="checkbox" class="topic-cb" value="4" checked> 4. Phép toán vectơ</label>
+
                     <label class="checkbox-item"><input type="checkbox" class="topic-cb" value="5" checked> 5. Trung điểm & Trọng tâm</label>
+
                     <label class="checkbox-item"><input type="checkbox" class="topic-cb" value="6" checked> 6. Tích vô hướng & Góc</label>
+
                 </div>
+
             </div>
+
             <div style="display: flex; gap: 10px;">
+
                 <button class="btn btn-secondary" onclick="closeModal('setupModal')">Hủy</button>
+
                 <button class="btn btn-warning" onclick="startChallenge()">Bắt Đầu (+1 / -2)</button>
+
             </div>
+
         </div>
+
     </div>
 
+
+
     <!-- Modal Quiz (Luyện tập & Thử thách) -->
+
     <div class="modal" id="quizModal">
+
         <div class="auth-card">
+
             <div class="quiz-header">
+
                 <span id="quizPlayer">Học sinh</span>
+
                 <span class="score-box" id="scoreDisplay">Điểm: 0</span>
+
                 <span class="streak-box" id="streakDisplay">Chuỗi: 0/20 🔥</span>
+
             </div>
+
+
 
             <div class="question-text" id="questionBox">Đang tải câu hỏi...</div>
 
+
+
             <div class="options-grid" id="optionsBox"></div>
+
+
 
             <div class="feedback-box" id="feedbackBox"></div>
 
+
+
             <div style="display: flex; gap: 10px;">
+
                 <button class="btn btn-secondary" onclick="closeModal('quizModal')">Thoát</button>
+
                 <button class="btn btn-primary" id="nextBtn" style="display:none;" onclick="renderNextQuestion()">Câu Tiếp theo ➔</button>
+
             </div>
+
         </div>
+
     </div>
 
-    <script>
-/**
- * ỨNG DỤNG HỖ TRỢ DẠY - HỌC TỌA ĐỘ VECTƠ (MOBILE APP ENGINE)
- * Chuyên gia Thiết kế Trắc nghiệm & WebApp Mobile
- */
 
-// ==========================================
-// 1. TRẠNG THÁI HỆ THỐNG & KẾT NỐI LOCALSTORAGE
-// ==========================================
-let isChallenge = false;
-let selectedTopics = [1, 2, 3, 4, 5, 6];
-let score = 0;
-let streak = 0;
-let highScore = parseInt(localStorage.getItem('vector_app_highscore')) || 0;
-let currentQuestion = null;
 
-// Khởi tạo app khi DOM sẵn sàng
-document.addEventListener('DOMContentLoaded', () => {
-    updateHighScoreDisplay();
-});
+    <!-- Nút bay Toàn màn hình -->
 
-// Cập nhật hiển thị kỷ lục
-function updateHighScoreDisplay() {
-    const hsEl = document.getElementById('highScoreDisplay');
-    if (hsEl) {
-        hsEl.innerText = `Kỷ lục: ${highScore}`;
-    }
-}
+    <button class="fab-fullscreen" id="fsBtn" onclick="toggleFullScreen()" title="Toàn màn hình">
 
-// Rung phản hồi haptic cho thiết bị di động
-function triggerHaptic(type) {
-    if ('navigator' in window && 'vibrate' in navigator) {
-        if (type === 'correct') {
-            navigator.vibrate([40, 30, 40]); // Rung nhẹ 2 nhịp khi đúng
-        } else if (type === 'wrong') {
-            navigator.vibrate(200); // Rung dài khi sai
-        } else if (type === 'win') {
-            navigator.vibrate([100, 50, 100, 50, 200]); // Rung chúc mừng
-        }
-    }
-}
+        <span id="fsIcon">⛶</span>
 
-// ==========================================
-// 2. ĐIỀU KHIỂN GIAO DIỆN & MODAL
-// ==========================================
+    </button>
 
-/**
- * Mở chế độ Luyện tập theo từng thẻ công thức (Topic 1 - 6)
- * @param {number} topicId 
- */
-function openPractice(topicId) {
-    isChallenge = false;
-    selectedTopics = [topicId];
-    score = 0;
-    streak = 0;
 
-    const playerEl = document.getElementById('quizPlayer');
-    const scoreEl = document.getElementById('scoreDisplay');
-    const streakEl = document.getElementById('streakDisplay');
 
-    if (playerEl) playerEl.innerText = `🎯 Luyện tập Thẻ ${topicId}`;
-    if (scoreEl) scoreEl.style.display = "none";
-    if (streakEl) streakEl.style.display = "none";
+    <!-- Liên kết file JavaScript -->
 
-    const modal = document.getElementById('quizModal');
-    if (modal) modal.classList.add('active');
-    
-    renderNextQuestion();
-}
+    <script type="module" src="script.js"></script>
+	
 
-/**
- * Mở Modal cấu hình Thử thách 20 câu
- */
-function openChallengeModal() {
-    const modal = document.getElementById('setupModal');
-    if (modal) modal.classList.add('active');
-}
-
-/**
- * Đóng Modal theo ID
- * @param {string} modalId 
- */
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) modal.classList.remove('active');
-}
-
-/**
- * Bắt đầu Thử thách Chuỗi 20 câu
- */
-function startChallenge() {
-    const nameInput = document.getElementById('studentName');
-    const name = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : "Học sinh";
-    
-    const checkboxes = document.querySelectorAll('.topic-cb:checked');
-    if (checkboxes.length === 0) {
-        alert("Vui lòng chọn ít nhất 1 khối công thức để bắt đầu!");
-        return;
-    }
-    
-    selectedTopics = Array.from(checkboxes).map(cb => parseInt(cb.value));
-    isChallenge = true;
-    score = 0;
-    streak = 0;
-
-    const playerEl = document.getElementById('quizPlayer');
-    const scoreEl = document.getElementById('scoreDisplay');
-    const streakEl = document.getElementById('streakDisplay');
-
-    if (playerEl) playerEl.innerText = `👤 ${name}`;
-    if (scoreEl) scoreEl.style.display = "inline";
-    if (streakEl) streakEl.style.display = "inline";
-    
-    updateStats();
-    closeModal('setupModal');
-    
-    const quizModal = document.getElementById('quizModal');
-    if (quizModal) quizModal.classList.add('active');
-    
-    renderNextQuestion();
-}
-
-/**
- * Cập nhật bảng điểm và chuỗi đúng
- */
-function updateStats() {
-    const scoreEl = document.getElementById('scoreDisplay');
-    const streakEl = document.getElementById('streakDisplay');
-    
-    if (scoreEl) scoreEl.innerText = `Điểm: ${score}`;
-    if (streakEl) streakEl.innerText = `Chuỗi: ${streak}/20 🔥`;
-
-    // Cập nhật kỷ lục cá nhân
-    if (score > highScore) {
-        highScore = score;
-        localStorage.setItem('vector_app_highscore', highScore);
-        updateHighScoreDisplay();
-    }
-}
-
-// ==========================================
-// 3. THUẬT TOÁN SINH CÂU HỎI & GÂY NHIỄU SÂU
-// ==========================================
-
-const rInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-const rNonZero = (min, max) => {
-    let val = 0;
-    while (val === 0) val = rInt(min, max);
-    return val;
-};
-
-/**
- * Engine sinh câu hỏi trắc nghiệm ngẫu nhiên theo chủ đề được chọn
- * Các phương án nhiễu được tạo từ các bước giải sai phổ biến của học sinh
- */
-function generateQuestion() {
-    const topic = selectedTopics[Math.floor(Math.random() * selectedTopics.length)];
-    let qText = "";
-    let correctVal = "";
-    let distractors = [];
-    let explanation = "";
-
-    // ------------------------------------------
-    // DẠNG 1: TỌA ĐỘ VECTƠ & ĐIỂM
-    // ------------------------------------------
-    if (topic === 1) {
-        const subType = Math.random() < 0.5 ? 'vector_ab' : 'unit_vector';
-        
-        if (subType === 'vector_ab') {
-            const xA = rInt(-5, 5), yA = rInt(-5, 5);
-            const xB = rInt(-5, 5), yB = rInt(-5, 5);
-            qText = `Cho hai điểm $A(${xA}; ${yA})$ và $B(${xB}; ${yB})$. Tọa độ của vectơ $\\vec{AB}$ là:`;
-            
-            const xAns = xB - xA;
-            const yAns = yB - yA;
-            correctVal = `(${xAns}; ${yAns})`;
-
-            // Gây nhiễu từ sai lầm phổ biến:
-            distractors.push(`(${xA - xB}; ${yA - yB})`); // Lỗi 1: Ngược điểm (Lấy A - B)
-            distractors.push(`(${xA + xB}; ${yA + yB})`); // Lỗi 2: Nhầm công thức (Cộng tọa độ)
-            distractors.push(`(${yAns}; ${xAns})`);       // Lỗi 3: Đáo vị trí hoành - tung
-
-            explanation = `Công thức: $\\vec{AB} = (x_B - x_A; y_B - y_A) = (${xB} - (${xA}); ${yB} - (${yA})) = (${xAns}; ${yAns})$.`;
-        } else {
-            const x = rNonZero(-6, 6);
-            const y = rNonZero(-6, 6);
-            qText = `Trong mặt phẳng $Oxy$, cho vectơ $\\vec{u} = ${x}\\vec{i} ${y > 0 ? '+ ' + y : '- ' + Math.abs(y)}\\vec{j}$. Tọa độ của $\\vec{u}$ là:`;
-            
-            correctVal = `(${x}; ${y})`;
-            distractors.push(`(${y}; ${x})`);            // Lỗi 1: Nhầm thứ tự i, j
-            distractors.push(`(${-x}; ${-y})`);          // Lỗi 2: Đổi dấu cả 2 tọa độ
-            distractors.push(`(${x + y}; ${x - y})`);     // Lỗi 3: Thực hiện phép cộng trừ hệ số
-
-            explanation = `Biểu diễn theo vectơ đơn vị $\\vec{u} = x\\vec{i} + y\\vec{j} \\Rightarrow \\vec{u} = (x; y) = (${x}; ${y})$.`;
-        }
-    }
-
-    // ------------------------------------------
-    // DẠNG 2: ĐỘ DÀI VECTƠ & KHOẢNG CÁCH
-    // ------------------------------------------
-    else if (topic === 2) {
-        const subType = Math.random() < 0.5 ? 'length_u' : 'dist_ab';
-        
-        if (subType === 'length_u') {
-            // Chọn bộ số đẹp Pythagore hoặc số nguyên
-            const pyth = [[3, 4], [6, 8], [5, 12]];
-            const pair = pyth[Math.floor(Math.random() * pyth.length)];
-            const x = pair[0] * (Math.random() < 0.5 ? 1 : -1);
-            const y = pair[1] * (Math.random() < 0.5 ? 1 : -1);
-            
-            qText = `Độ dài của vectơ $\\vec{u} = (${x}; ${y})$ là:`;
-            const len = Math.sqrt(x * x + y * y);
-            correctVal = `${len}`;
-
-            // Gây nhiễu:
-            distractors.push(`${x * x + y * y}`);                   // Lỗi 1: Quên lấy căn bậc hai (x^2 + y^2)
-            distractors.push(`${Math.abs(x) + Math.abs(y)}`);       // Lỗi 2: Cộng trực tiếp độ dài hoành + tung
-            distractors.push(`${Math.abs(x * x - y * y)}`);         // Lỗi 3: Nhầm dấu trừ trong căn
-
-            explanation = `Công thức độ dài: $|\\vec{u}| = \\sqrt{x^2 + y^2} = \\sqrt{(${x})^2 + (${y})^2} = \\sqrt{${x*x + y*y}} = ${len}$.`;
-        } else {
-            const xA = rInt(-3, 3), yA = rInt(-3, 3);
-            const dx = 3 * (Math.random() < 0.5 ? 1 : -1);
-            const dy = 4 * (Math.random() < 0.5 ? 1 : -1);
-            const xB = xA + dx, yB = yA + dy;
-
-            qText = `Khoảng cách giữa hai điểm $A(${xA}; ${yA})$ và $B(${xB}; ${yB})$ bằng:`;
-            correctVal = `5`;
-
-            distractors.push(`25`);                                 // Lỗi 1: Bỏ quên căn bậc 2
-            distractors.push(`${Math.abs(dx) + Math.abs(dy)}`);     // Lỗi 2: Lấy tổng trị tuyệt đối hiệu
-            distractors.push(`7`);                                  // Lỗi 3: Tính nhầm căn (3^2+4^2 nhầm sang 3+4)
-
-            explanation = `Khoảng cách $AB = \\sqrt{(x_B-x_A)^2 + (y_B-y_A)^2} = \\sqrt{(${dx})^2 + (${dy})^2} = \\sqrt{25} = 5$.`;
-        }
-    }
-
-    // ------------------------------------------
-    // DẠNG 3: QUAN HỆ HAI VECTƠ (CÙNG PHƯƠNG, BẰNG NHAU)
-    // ------------------------------------------
-    else if (topic === 3) {
-        const subType = Math.random() < 0.5 ? 'collinear_m' : 'equal_vector';
-        
-        if (subType === 'collinear_m') {
-            const k = rNonZero(-3, 4);
-            const x1 = rNonZero(-4, 4);
-            const y1 = rNonZero(-4, 4);
-            const x2 = k * x1;
-            
-            qText = `Cho $\\vec{a} = (${x1}; ${y1})$ và $\\vec{b} = (${x2}; m)$. Tìm $m$ để hai vectơ $\\vec{a}$ và $\\vec{b}$ cùng phương:`;
-            const mCorrect = k * y1;
-            correctVal = `m = ${mCorrect}`;
-
-            // Gây nhiễu từ lỗi giải tỉ số x1/x2 = y1/y2:
-            distractors.push(`m = ${-mCorrect}`);                   // Lỗi 1: Nhầm dấu hệ số k
-            distractors.push(`m = ${y1}`);                          // Lỗi 2: Cho m bằng tung độ ban đầu y1
-            distractors.push(`m = ${mCorrect + 2}`);                // Lỗi 3: Lỗi cộng nhầm hệ số khi chuyển vế
-
-            explanation = `Hai vectơ cùng phương khi $\\vec{b} = k\\vec{a} \\Rightarrow \\frac{${x2}}{${x1}} = \\frac{m}{${y1}} = ${k} \\Rightarrow m = ${k} \\cdot (${y1}) = ${mCorrect}$.`;
-        } else {
-            const xA = rInt(-4, 4), yA = rInt(-4, 4);
-            const xB = rInt(-4, 4), yB = rInt(-4, 4);
-            const xC = rInt(-4, 4), yC = rInt(-4, 4);
-            // Tìm D sao cho ABCD là hình bình hành => AB = DC => xD - xC = xB - xA => xD = xC + xB - xA
-            const xD = xC + (xB - xA);
-            const yD = yC + (yB - yA);
-
-            qText = `Cho 3 điểm $A(${xA}; ${yA})$, $B(${xB}; ${yB})$, $C(${xC}; ${yC})$. Tọa độ điểm $D$ để $\\vec{AB} = \\vec{DC}$ là:`;
-            // AB = DC => xC - xD = xB - xA => xD = xC - (xB - xA)
-            const xD_correct = xC - (xB - xA);
-            const yD_correct = yC - (yB - yA);
-            correctVal = `(${xD_correct}; ${yD_correct})`;
-
-            distractors.push(`(${xD}; ${yD})`);                      // Lỗi 1: Nhầm sang đẳng thức AB = CD (Hình bình hành ABDC)
-            distractors.push(`(${xB - xA}; ${yB - yA})`);            // Lỗi 2: Nhầm điểm D chính là vectơ AB
-            distractors.push(`(${xD_correct + 1}; ${yD_correct - 1})`);// Lỗi 3: Sai dấu khi chuyển vế
-
-            explanation = `Đẳng thức $\\vec{AB} = \\vec{DC} \\Leftrightarrow (x_B-x_A; y_B-y_A) = (x_C-x_D; y_C-y_D) \\Rightarrow D(${xD_correct}; ${yD_correct})$.`;
-        }
-    }
-
-    // ------------------------------------------
-    // DẠNG 4: PHÉP TOÁN VECTƠ (CỘNG, TRỪ, NHÂN HỆ SỐ)
-    // ------------------------------------------
-    else if (topic === 4) {
-        const x1 = rInt(-4, 4), y1 = rInt(-4, 4);
-        const x2 = rInt(-4, 4), y2 = rInt(-4, 4);
-        const k = rNonZero(-2, 3);
-
-        if (k === 1) {
-            qText = `Cho $\\vec{a}=(${x1}; ${y1})$ và $\\vec{b}=(${x2}; ${y2})$. Tọa độ của $\\vec{u} = \\vec{a} - \\vec{b}$ là:`;
-            correctVal = `(${x1 - x2}; ${y1 - y2})`;
-
-            distractors.push(`(${x1 + x2}; ${y1 + y2})`);            // Lỗi 1: Nhầm phép trừ thành phép cộng
-            distractors.push(`(${x2 - x1}; ${y2 - y1})`);            // Lỗi 2: Trừ ngược thứ tự b - a
-            distractors.push(`(${x1 * x2}; ${y1 * y2})`);            // Lỗi 3: Nhân hai tọa độ với nhau
-
-            explanation = `Phép trừ vectơ: $\\vec{a} - \\vec{b} = (x_1 - x_2; y_1 - y_2) = (${x1}-(${x2}); ${y1}-(${y2})) = (${x1-x2}; ${y1-y2})$.`;
-        } else {
-            qText = `Cho $\\vec{a}=(${x1}; ${y1})$ và $\\vec{b}=(${x2}; ${y2})$. Tọa độ của $\\vec{v} = ${k}\\vec{a} + \\vec{b}$ là:`;
-            const xAns = k * x1 + x2;
-            const yAns = k * y1 + y2;
-            correctVal = `(${xAns}; ${yAns})`;
-
-            distractors.push(`(${k * x1 + x2}; ${y1 + y2})`);         // Lỗi 1: Chỉ nhân k vào hoành độ, quên nhân tung độ
-            distractors.push(`(${k * x1 - x2}; ${k * y1 - y2})`);     // Lỗi 2: Nhầm dấu cộng thành dấu trừ
-            distractors.push(`(${x1 + x2}; ${y1 + y2})`);            // Lỗi 3: Quên nhân hệ số k
-
-            explanation = `Tính $k\\vec{a} = (${k*x1}; ${k*y1})$, sau đó cộng với $\\vec{b} \\Rightarrow \\vec{v} = (${xAns}; ${yAns})$.`;
-        }
-    }
-
-    // ------------------------------------------
-    // DẠNG 5: TRUNG ĐIỂM & TRỌNG TÂM
-    // ------------------------------------------
-    else if (topic === 5) {
-        const subType = Math.random() < 0.5 ? 'midpoint' : 'centroid';
-
-        if (subType === 'midpoint') {
-            const xA = rInt(-5, 5), yA = rInt(-5, 5);
-            const xB = rInt(-5, 5), yB = rInt(-5, 5);
-            // Chọn số để tổng chẵn cho tọa độ đẹp
-            const xA_c = (xA + xB) % 2 !== 0 ? xA + 1 : xA;
-            const yA_c = (yA + yB) % 2 !== 0 ? yA + 1 : yA;
-
-            qText = `Tọa độ trung điểm $M$ của đoạn thẳng $AB$ với $A(${xA_c}; ${yA_c})$ và $B(${xB}; ${yB})$ là:`;
-            const xM = (xA_c + xB) / 2;
-            const yM = (yA_c + yB) / 2;
-            correctVal = `(${xM}; ${yM})`;
-
-            distractors.push(`(${xA_c + xB}; ${yA_c + yB})`);        // Lỗi 1: Quên chia 2 (Tổng đơn thuần)
-            distractors.push(`(${xM > 0 ? xM - 1 : xM + 1}; ${yM})`);// Lỗi 2: Lấy hiệu chia 2
-            distractors.push(`(${((xA_c + xB)/3).toFixed(1)}; ${((yA_c + yB)/3).toFixed(1)})`); // Lỗi 3: Nhầm chia 3 của trọng tâm
-
-            explanation = `Công thức trung điểm: $M\\left(\\frac{x_A+x_B}{2}; \\frac{y_A+y_B}{2}\\right) = \\left(\\frac{${xA_c}+(${xB})}{2}; \\frac{${yA_c}+(${yB})}{2}\\right) = (${xM}; ${yM})$.`;
-        } else {
-            const xA = rInt(-4, 4), yA = rInt(-4, 4);
-            const xB = rInt(-4, 4), yB = rInt(-4, 4);
-            const xC = rInt(-4, 4), yC = rInt(-4, 4);
-            
-            // Điều chỉnh tổng chia hết cho 3
-            const modX = (xA + xB + xC) % 3;
-            const modY = (yA + yB + yC) % 3;
-            const xA_c = xA - modX;
-            const yA_c = yA - modY;
-
-            qText = `Tọa độ trọng tâm $G$ của tam giác $ABC$ với $A(${xA_c}; ${yA_c})$, $B(${xB}; ${yB})$, $C(${xC}; ${yC})$ là:`;
-            const xG = (xA_c + xB + xC) / 3;
-            const yG = (yA_c + yB + yC) / 3;
-            correctVal = `(${xG}; ${yG})`;
-
-            distractors.push(`(${xA_c + xB + xC}; ${yA_c + yB + yC})`); // Lỗi 1: Quên chia 3
-            distractors.push(`(${((xA_c + xB + xC)/2).toFixed(1)}; ${((yA_c + yB + yC)/2).toFixed(1)})`); // Lỗi 2: Chia 2 (nhầm trung điểm)
-            distractors.push(`(${-xG}; ${-yG})`);                    // Lỗi 3: Nhầm dấu tọa độ trọng tâm
-
-            explanation = `Công thức trọng tâm tam giác: $G\\left(\\frac{x_A+x_B+x_C}{3}; \\frac{y_A+y_B+y_C}{3}\\right) = (${xG}; ${yG})$.`;
-        }
-    }
-
-    // ------------------------------------------
-    // DẠNG 6: TÍCH VÔ HƯỚNG & GÓC
-    // ------------------------------------------
-    else {
-        const subType = Math.random() < 0.5 ? 'dot_product' : 'perpendicular';
-
-        if (subType === 'dot_product') {
-            const x1 = rInt(-4, 4), y1 = rInt(-4, 4);
-            const x2 = rInt(-4, 4), y2 = rInt(-4, 4);
-            qText = `Tích vô hướng $\\vec{a}\\cdot\\vec{b}$ của $\\vec{a}=(${x1}; ${y1})$ và $\\vec{b}=(${x2}; ${y2})$ bằng:`;
-            
-            const dot = x1 * x2 + y1 * y2;
-            correctVal = `${dot}`;
-
-            distractors.push(`${x1 * y2 + x2 * y1}`);               // Lỗi 1: Nhân chéo hoành x tung (x1*y2 + x2*y1)
-            distractors.push(`(${x1 * x2}; ${y1 * y2})`);           // Lỗi 2: Nhầm kết quả vô hướng thành cặp tọa độ
-            distractors.push(`${x1 * x2 - y1 * y2}`);               // Lỗi 3: Nhầm dấu cộng thành trừ (x1*x2 - y1*y2)
-
-            explanation = `Công thức tích vô hướng: $\\vec{a}\\cdot\\vec{b} = x_1x_2 + y_1y_2 = (${x1})(${x2}) + (${y1})(${y2}) = ${dot}$.`;
-        } else {
-            const x1 = rNonZero(-3, 4);
-            const y1 = rNonZero(-3, 4);
-            // Chọn b sao cho a.b = 0 => x1*x2 + y1*y2 = 0 => x2 = y1, y2 = -x1
-            const x2 = y1;
-            const y2 = -x1;
-
-            qText = `Cho $\\vec{a}=(${x1}; ${y1})$ và $\\vec{b}=(${x2}; m)$. Tìm $m$ để $\\vec{a} \\perp \\vec{b}$:`;
-            correctVal = `m = ${y2}`;
-
-            distractors.push(`m = ${-y2}`);                         // Lỗi 1: Nhầm dấu phương trình tích vô hướng
-            distractors.push(`m = ${x2}`);                          // Lỗi 2: Cho m bằng hoành độ
-            distractors.push(`m = 0`);                              // Lỗi 3: Đoán mò m = 0
-
-            explanation = `Hai vectơ vuông góc $\\vec{a} \\perp \\vec{b} \\Leftrightarrow \\vec{a}\\cdot\\vec{b} = 0 \\Leftrightarrow (${x1})(${x2}) + (${y1})(m) = 0 \\Rightarrow m = ${y2}$.`;
-        }
-    }
-
-    // Lọc loại bỏ trùng lặp giữa các phương án nhiễu & đáp án đúng
-    let uniqueOptions = Array.from(new Set([correctVal, ...distractors]));
-    
-    // Nếu thiếu lựa chọn, tự động sinh phương án bổ sung hợp lý
-    while (uniqueOptions.length < 4) {
-        const dummyX = rInt(-8, 8);
-        const dummyY = rInt(-8, 8);
-        const dummy = correctVal.includes('(') ? `(${dummyX}; ${dummyY})` : `${dummyX}`;
-        if (!uniqueOptions.includes(dummy)) {
-            uniqueOptions.push(dummy);
-        }
-    }
-
-    // Trộn ngẫu nhiên 4 phương án
-    uniqueOptions = uniqueOptions.sort(() => Math.random() - 0.5);
-
-    return {
-        text: qText,
-        correct: correctVal,
-        options: uniqueOptions,
-        explanation: explanation
-    };
-}
-
-// ==========================================
-// 4. KHỞI TẠO & XỬ LÝ TRẢ LỜI CÂU HỎI
-// ==========================================
-
-/**
- * Hiển thị câu hỏi tiếp theo lên màn hình
- */
-
-function renderMathInApp(element) {
-    if (window.renderMathInElement && element) {
-        renderMathInElement(element, {
-            delimiters: [
-                {left: '$$', right: '$$', display: true},
-                {left: '$', right: '$', display: false},
-                {left: '\\(', right: '\\)', display: false},
-                {left: '\\[', right: '\\]', display: true}
-            ],
-            throwOnError: false
-        });
-    }
-}
-
-function renderNextQuestion() {
-    const feedback = document.getElementById('feedbackBox');
-    const nextBtn = document.getElementById('nextBtn');
-    
-    if (feedback) {
-        feedback.className = "feedback-box";
-        feedback.style.display = "none";
-    }
-    if (nextBtn) nextBtn.style.display = "none";
-
-    currentQuestion = generateQuestion();
-    
-    const qBox = document.getElementById('questionBox');
-    if (qBox) qBox.innerHTML = currentQuestion.text;
-
-    const optionsBox = document.getElementById('optionsBox');
-    if (optionsBox) {
-        optionsBox.innerHTML = "";
-        currentQuestion.options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = "option-btn";
-            btn.innerHTML = `<span>${opt}</span>`;
-            btn.onclick = () => checkAnswer(btn, opt);
-            optionsBox.appendChild(btn);
-        });
-    }
-
-    // Render công thức toán KaTeX
-    if (window.renderMathInElement) {
-        const quizModal = document.getElementById('quizModal');
-        if (quizModal) renderMathInApp(quizModal);
-    }
-}
-
-/**
- * Kiểm tra đáp án khi người dùng bấm chọn
- * @param {HTMLElement} selectedBtn 
- * @param {string} chosenOpt 
- */
-function checkAnswer(selectedBtn, chosenOpt) {
-    const allBtns = document.querySelectorAll('.option-btn');
-    allBtns.forEach(btn => btn.disabled = true);
-
-    const feedback = document.getElementById('feedbackBox');
-
-    if (chosenOpt === currentQuestion.correct) {
-        selectedBtn.classList.add('correct');
-        triggerHaptic('correct');
-
-        if (feedback) {
-            feedback.className = "feedback-box correct";
-            feedback.innerHTML = "✅ <b>Chính xác!</b> +1 điểm.<br>" + currentQuestion.explanation;
-        }
-
-        if (isChallenge) {
-            score += 1;
-            streak += 1;
-            updateStats();
-
-            if (streak >= 20) {
-                triggerHaptic('win');
-                alert(`🎉 CHÚC MỪNG! Bạn đã xuất sắc vượt qua Thử Thách 20 câu đúng liên tiếp!\n\nTổng điểm đạt được: ${score}`);
-                closeModal('quizModal');
-                return;
-            }
-        }
-    } else {
-        selectedBtn.classList.add('wrong');
-        triggerHaptic('wrong');
-
-        // Highlight đáp án đúng để học sinh đối chiếu
-        allBtns.forEach(btn => {
-            if (btn.innerText.trim() === currentQuestion.correct.trim()) {
-                btn.classList.add('correct');
-            }
-        });
-
-        if (feedback) {
-            feedback.className = "feedback-box wrong";
-            feedback.innerHTML = "❌ <b>Rất tiếc, bạn đã chọn sai!</b> -2 điểm (Chuỗi reset về 0).<br>" + currentQuestion.explanation;
-        }
-
-        if (isChallenge) {
-            score -= 2;
-            streak = 0;
-            updateStats();
-        }
-    }
-
-    if (window.renderMathInElement && feedback) {
-        renderMathInApp(feedback);
-    }
-
-    const nextBtn = document.getElementById('nextBtn');
-    if (nextBtn) nextBtn.style.display = "block";
-}
-
-	// Hàm Bật / Tắt Toàn màn hình (Fullscreen API)
-	function toggleFullScreen() {
-		const docEl = document.documentElement;
-		if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-			if (docEl.requestFullscreen) {
-				docEl.requestFullscreen();
-			} else if (docEl.webkitRequestFullscreen) { // Hỗ trợ Safari/iOS
-				docEl.webkitRequestFullscreen();
-			}
-		} else {
-			if (document.exitFullscreen) {
-				document.exitFullscreen();
-			} else if (document.webkitExitFullscreen) {
-				document.webkitExitFullscreen();
-			}
-		}
-	}
-
-	// Cập nhật biểu tượng nút khi thay đổi trạng thái màn hình
-	['fullscreenchange', 'webkitfullscreenchange'].forEach(evt => {
-		document.addEventListener(evt, () => {
-			const icon = document.getElementById('fsIcon');
-			if (icon) {
-				const isFS = document.fullscreenElement || document.webkitFullscreenElement;
-				icon.innerText = isFS ? '✖' : '⛶';
-			}
-		});
-	});
-    </script>
-	<!-- Nút bay Toàn màn hình -->
-	<button class="fab-fullscreen" id="fsBtn" onclick="toggleFullScreen()" title="Toàn màn hình">
-		<span id="fsIcon">⛶</span>
-	</button>
 </body>
+
 </html>

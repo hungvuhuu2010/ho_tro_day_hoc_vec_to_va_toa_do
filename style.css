@@ -1,0 +1,205 @@
+:root {
+
+    --primary-color: #2563eb;
+
+    --primary-hover: #1d4ed8;
+
+    --success-color: #16a34a;
+
+    --success-hover: #15803d;
+
+    --danger-color: #dc2626;
+
+    --dark-bg: #0f172a;
+
+    --light-bg: #f8fafc;
+
+    --card-bg: #ffffff;
+
+    --border-color: #e2e8f0;
+
+    --text-main: #334155;
+
+    --text-muted: #64748b;
+
+}
+
+
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+
+body { background-color: var(--light-bg); color: var(--text-main); min-height: 100vh; line-height: 1.5; padding-bottom: 30px; }
+
+
+
+.portal-header { background: #fff; border-bottom: 1px solid var(--border-color); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+
+.logo-area { display: flex; align-items: center; gap: 10px; }
+
+.portal-logo { font-size: 1.6rem; }
+
+.logo-area h1 { font-size: 1.05rem; color: var(--dark-bg); font-weight: 700; }
+
+.badge-group { display: flex; gap: 6px; align-items: center; }
+
+.badge { background: #e0e7ff; color: #3730a3; font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+
+.badge-highscore { background: #fef3c7; color: #b45309; }
+
+
+
+.portal-content { max-width: 600px; margin: 20px auto; padding: 0 16px; }
+
+
+
+.section-title { margin-bottom: 16px; }
+
+.section-title h2 { font-size: 1.2rem; color: #1e293b; }
+
+.section-title p { font-size: 0.85rem; color: var(--text-muted); }
+
+
+
+.app-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+
+.app-card { background: #fff; border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; display: flex; gap: 14px; align-items: flex-start; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+
+.app-card:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06); }
+
+.app-card.challenge-card { border: 2px solid #f59e0b; background: #fffbeb; }
+
+
+
+.app-icon { font-size: 1.8rem; background: #eff6ff; padding: 10px; border-radius: 10px; line-height: 1; flex-shrink: 0; }
+
+.challenge-icon { background: #fef3c7; color: #d97706; }
+
+.app-details { flex-grow: 1; }
+
+.app-details h3 { font-size: 1rem; margin-bottom: 4px; color: var(--dark-bg); }
+
+.app-details p { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px; }
+
+
+
+.btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px 14px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; font-size: 0.85rem; width: 100%; }
+
+.btn-primary { background: var(--primary-color); color: #fff; } .btn-primary:hover { background: var(--primary-hover); }
+
+.btn-warning { background: #d97706; color: #fff; } .btn-warning:hover { background: #b45309; }
+
+.btn-success { background: var(--success-color); color: #fff; }
+
+.btn-danger { background: var(--danger-color); color: #fff; }
+
+.btn-secondary { background: #64748b; color: #fff; }
+
+
+
+/* Modal & Setup View */
+
+.modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); z-index: 1000; justify-content: center; align-items: center; padding: 16px; overflow-y: auto; }
+
+.modal.active { display: flex; }
+
+.auth-card { background: var(--card-bg); width: 100%; max-width: 480px; padding: 24px; border-radius: 14px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); }
+
+
+
+.input-group { text-align: left; margin-bottom: 14px; }
+
+.input-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-main); }
+
+.input-group input[type="text"] { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; outline: none; }
+
+.input-group input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+
+
+
+.checkbox-group { display: flex; flex-direction: column; gap: 8px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); max-height: 200px; overflow-y: auto; margin-bottom: 16px; }
+
+.checkbox-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; cursor: pointer; }
+
+.checkbox-item input { width: 16px; height: 16px; accent-color: var(--primary-color); }
+
+
+
+/* Score & Quiz Interface */
+
+.quiz-header { display: flex; justify-content: space-between; align-items: center; background: #f1f5f9; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 0.85rem; font-weight: 700; }
+
+.score-box { color: var(--primary-color); }
+
+.streak-box { color: #d97706; }
+
+.question-text { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: var(--dark-bg); background: #f8fafc; padding: 14px; border-radius: 8px; border-left: 4px solid var(--primary-color); }
+
+
+
+.options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+
+.option-btn { background: #fff; border: 1.5px solid var(--border-color); padding: 12px 16px; border-radius: 8px; text-align: left; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; }
+
+.option-btn:hover { border-color: var(--primary-color); background: #eff6ff; }
+
+.option-btn.correct { background: #dcfce7; border-color: var(--success-color); color: #15803d; }
+
+.option-btn.wrong { background: #fee2e2; border-color: var(--danger-color); color: #b91c1c; }
+
+
+
+.feedback-box { padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; margin-bottom: 14px; display: none; }
+
+.feedback-box.correct { display: block; background: #dcfce7; color: #15803d; }
+
+.feedback-box.wrong { display: block; background: #fee2e2; color: #b91c1c; }
+
+
+
+/* Nút bay Fullscreen chuẩn Mobile UX */
+
+.fab-fullscreen {
+
+    position: fixed;
+
+    bottom: 20px;
+
+    right: 20px;
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 50%;
+
+    background: var(--primary-color, #2563eb);
+
+    color: #ffffff;
+
+    border: none;
+
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+
+    font-size: 1.3rem;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    z-index: 9999;
+
+    transition: transform 0.2s, background 0.2s;
+
+}
+
+
+
+.fab-fullscreen:active {
+
+    transform: scale(0.9);
+
+}
